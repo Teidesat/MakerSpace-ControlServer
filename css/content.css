@@ -1,0 +1,102 @@
+html {
+  background-color: rebeccapurple;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  margin: 0;
+  color:white;
+  background-color:#121212;
+}
+
+.logo {
+  background-color: white;
+  text-align: center;
+  height: auto;
+}
+
+.menu {
+  background-color:crimson;
+  text-align: center;
+  padding: 0;
+}
+
+.button {
+  background-color:darkred;
+  color: white;
+  border: 0;
+  height: 40px;
+}
+
+.button:hover {
+  background-color: red;
+}
+
+.userlist {
+  background-color: purple;
+  text-align: center;
+}
+
+.userlist:hover {
+  background-color: blueviolet;
+}
+
+.userinfo {
+  background-color: rebeccapurple;  
+  text-align: center;
+}
+
+.permisos {
+  background-color: rebeccapurple;
+  text-align: center;
+}
+
+.guardar {
+  color: white;
+  background-color: rgb(53, 15, 91);
+  text-align: center;
+  border: 0;
+  padding: 20px;
+}
+
+.guardar:hover {
+  color: white;
+  background-color: rgb(71, 18, 125);
+  text-align: center;
+  border: 0;
+  padding: 20px;
+}
+
+#inicio {
+  padding-top: 10px;
+  background-color: whitesmoke;
+  color: grey;
+  margin-left: 10%;
+  margin-right: 10%;
+  text-indent: 1%;
+}
+
+#fondoElementos {
+  width: 50;
+  padding-top: 10px;
+  background-color: rebeccapurple;
+}
+
+table, tr {
+  margin-left:auto;
+  margin-right:auto;
+  border-collapse: collapse;
+  margin: 10 10 10 10;
+  background-color: whitesmoke;
+  text-align: center;
+  border: 1px solid;
+  border-color: white;
+  color: rgb(75, 75, 75);
+  text-align: center;
+  width: 95%;
+}
+
+th {
+  color: white;
+  background-color: crimson;
+}
