@@ -1,19 +1,19 @@
 <!-- Servidor web de ULL Makerspace -->
 <!-- Diseñado por Salvador Pérez del Pino -->
 <!DOCTYPE html>
-<link rel="stylesheet" href="./css/content.css">
+<link rel="stylesheet" href="./../css/content.css">
 <html>
-  <?php include('./html/cabeza.html')?>
+  <?php include('./../html/cabeza-paginas.html')?>
 
   <body>
-    <?php include('./html/cabecera.html')?>
-    <?php include('./html/barra-navegacion.html')?>
+    <?php include('./../html/cabecera-paginas.html')?>
+    <?php include('./../html/barra-navegacion-paginas.html')?>
 
 
 
     <?php
       if($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $db = new SQLite3('makerspace.db');
+        $db = new SQLite3('./../makerspace.db');
         $query = "SELECT max(id) FROM usuarios";
         $next_id = intval($db->query($query)->fetchArray()[0]) + 1;
         // crear la consulta SQL para obtener el registro con el ID especificado

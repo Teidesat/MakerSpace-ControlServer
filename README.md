@@ -5,24 +5,22 @@
 ```sh
 sudo apt install sqlite3
 sudo apt install php-cli
-sudo apt-get install php8.1-sqlite   # Si se cuenta con otra versión de php, modificar comando ej: sudo apt-get install php8.1-sqlite php8.3-sqlite
+sudo apt-get install php8.1-sqlite   # Si se cuenta con otra versión de php modificar el comando
 ```
 
 ## Instrucciones para crear la base de datos
 
 Crear base de datos o acceder a la base de datos si ya existe el fichero
 
-Schema de la base de datos (instrucciones para crear las tablas)
-
-#### Esquema aun por implementar
+Schema de la base de datos (instrucciones para crear las tablas) si no existe. Mirar primero en '/bbdd' si ya existe el fichero
 
 ```sh
-sqlite3 ./bbdd/acceso_makerspace.db # ejecutar en el directorio principal ./servidor_control_de_acceso
+sqlite3 ./bbdd/acceso_makerspace.db # ejecutar en el directorio principal ./MakerSpace-ControlServer
 ```
 
 ```sql
 
-pragma foreign_keys = on;    -- ejecutar exta instruccion cada vez que se acceda directamente a la base de datos para forzar la foreing key
+pragma foreign_keys = on;  -- ejecutar exta instruccion cada vez que se acceda directamente a la base de datos para forzar la foreing key
 
 CREATE TABLE tarjetas(
 id_tarjeta TEXT PRIMARY KEY,

@@ -1,17 +1,17 @@
 <!-- Servidor web de ULL Makerspace -->
 <!-- Diseñado por Salvador Pérez del Pino-->
 <!DOCTYPE html>
-<link rel="stylesheet" href="./css/content.css">
+<link rel="stylesheet" href="./../css/content.css">
 <html>
-  <?php include('./html/cabeza.html')?>
+  <?php include('./../html/cabeza-paginas.html')?>
 
   <body>
-    <?php include('./html/cabecera.html')?>
-    <?php include('./html/barra-navegacion.html')?>
+    <?php include('./../html/cabecera-paginas.html')?>
+    <?php include('./../html/barra-navegacion-paginas.html')?>
 
     <!-- Acceso a la base de datos de usuarios y consultas-->
     <?php
-      $db = new SQLite3('makerspace.db');
+      $db = new SQLite3('./../bbdd/makerspace.db');
       $consulta = "SELECT * FROM usuarios";
       $resultado = $db->query($consulta);
       if(!$resultado) {die($db->lastErrorMsg());}
@@ -58,5 +58,5 @@
       </table>
     </div>
   </body>
-  <script src="./js/redirigir.js"></script>
+  <script src="./../js/redirigir.js"></script>
 </html>

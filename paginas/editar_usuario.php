@@ -1,18 +1,18 @@
 <!-- Servidor web de ULL Makerspace -->
 <!-- Diseñado por Salvador Pérez del Pino -->
 <!DOCTYPE html>
-<link rel="stylesheet" href="./css/content.css">
+<link rel="stylesheet" href="./../css/content.css">
 <html>
-  <?php include('./html/cabeza.html')?>
+  <?php include('./../html/cabeza.html')?>
 
   <body>
-    <?php include('./html/cabecera.html')?>
-    <?php include('./html/barra-navegacion.html')?>
+    <?php include('./../html/cabecera.html')?>
+    <?php include('./../html/barra-navegacion-paginas.html')?>
 
     <button class="button" onclick="location.href='usuarios.php'">Volver atrás</button>
    
     <?php
-      $db = new SQLite3('makerspace.db');
+      $db = new SQLite3('./../bbdd/makerspace.db');
       $id = $_GET["id"];
 
       // Recuperar datos de usuarios
@@ -31,7 +31,7 @@
       // Gardado de los nuevos datos
       if($_SERVER['REQUEST_METHOD'] == 'POST') {
         
-        $db = new SQLite3('makerspace.db');
+        $db = new SQLite3('./../bbdd/makerspace.db');
         // si pulsa botón guardar
         if(isset($_POST['guardar'])) {
           $nombre = $_POST['nombre'];
@@ -143,6 +143,5 @@
       </div>
     </form>
   </body>
-  <script src="./js/redirigir.js"></script>
 </html>
 
