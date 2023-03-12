@@ -24,7 +24,7 @@ Crear base de datos o acceder a la base de datos si ya existe el fichero (Tener 
 sqlite3 ./bbdd/acceso_makerspace.db # ejecutar en el directorio principal ./MakerSpace-ControlServer
 ```
 
-### Schema de la base de datos (instrucciones para crear las tablas) si no existe. Mirar primero en '/bbdd' si ya existe el fichero
+Schema de la base de datos:
 
 ```sql
 
