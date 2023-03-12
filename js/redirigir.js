@@ -1,9 +1,10 @@
-function redirigirEdicion() {
+function redirigirEdicionUsuario() {
   let opcion = document.getElementById("opcion").value;
   if (opcion != "") {window.location.href = "editar_usuario.php?id=" + opcion;}
 }
 
-function redirigirBorrado() {
+function redirigirEdicionTarjeta() {
   let opcion = document.getElementById("opcion").value;
-  if (opcion != "") {window.location.href = "borrar_usuario.php?id=" + opcion;}
+  if (opcion != "") {window.location.href = "editar_tarjeta.php?id=" + opcion;}
 }
+

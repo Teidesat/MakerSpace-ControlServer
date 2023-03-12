@@ -11,20 +11,20 @@
 
     <!-- Acceso a la base de datos de usuarios y consultas-->
     <?php
-      $db = new SQLite3('./../bbdd/makerspace.db');
+      $db = new SQLite3('./../bbdd/acceso_makerspace.db');
       $consulta = "SELECT * FROM usuarios";
       $resultado = $db->query($consulta);
       if(!$resultado) {die($db->lastErrorMsg());}
     ?>
 
-    <!-- Lista de ususarios para modificar-->
+    <!-- Lista de usuarios para modificar -->
     <form>
       <label>Editar usuario</label>
-      <select id="opcion" onchange="redirigirEdicion()">
+      <select id="opcion" onchange="redirigirEdicionUsuario()">
         <option value="">------</option>
         <?php
           while ($usuario = $resultado->fetchArray()) {
-            echo '<option value="'.$usuario['id'].'">'.$usuario['id'].': '.$usuario['nombre'].' '.$usuario['apellidos'].'<br>'.'</option>';
+            echo '<option value="'.$usuario['id_usuario'].'">'.$usuario['nombre'].' '.$usuario['apellidos'].'<br>'.'</option>';
           }
         ?>
       </select>
@@ -45,12 +45,12 @@
         //mostrar las filas de la tabla de usuarios
         while ($usuario = $resultado->fetchArray()) {
           echo '<tr>';
-            echo '<td>'.$usuario['id'].'</td>';
+            echo '<td>'.$usuario['id_usuario'].'</td>';
             echo '<td>'.$usuario['nombre'].'</td>';
             echo '<td>'.$usuario['apellidos'].'</td>';
             echo '<td>'.$usuario['correo'].'</td>';
             echo '<td>'.$usuario['rol'].'</td>';
-            echo '<td>'.$usuario['card_id'].'</td>';
+            echo '<td>'.$usuario['id_tarjeta'].'</td>';
           echo '</tr>';
         }
         $db->close();

@@ -1,6 +1,7 @@
 html {
   background-color: rebeccapurple;
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 80%;
 }
 
 body {
@@ -66,6 +67,12 @@ body {
   border: 0;
   padding: 20px;
 }
+
+
+#seleccion {
+  vertical-align: middle;
+}
+
 
 #inicio {
   padding-top: 10px;

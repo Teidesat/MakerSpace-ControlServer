@@ -12,7 +12,7 @@
     
     <div id='fondoElementos'>
       <p id='inicio'>
-        Contenido aqui<br><br><br><br><br><br><br><br>
+        Graphic desing is my passion<br><br><br><br><br><br><br><br>
       </p>
     </div>
   </body>

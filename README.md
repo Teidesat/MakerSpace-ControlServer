@@ -37,18 +37,17 @@ id_tarjeta TEXT);
 CREATE TABLE permisos(
 id_usuario INTEGER PRIMARY KEY,
 entrada INTEGER NOT NULL,
-arm_3d INTEGER NOT NULL,
 almacen INTEGER NOT NULL,
-arm_1 INTEGER NOT NULL,
-arm_2 INTEGER NOT NULL,
-arm_3 INTEGER NOT NULL,
-arm_4 INTEGER NOT NULL,
-arm_5 INTEGER NOT NULL,
-arm_6 INTEGER NOT NULL,
-arm_7 INTEGER NOT NULL,
-arm_8 INTEGER NOT NULL,
-arm_9 INTEGER NOT NULL,
-FOREIGN KEY(id_usuario) REFERENCES usuarios(id_usuario));
+armario_1 INTEGER NOT NULL,
+armario_2 INTEGER NOT NULL,
+armario_3 INTEGER NOT NULL,
+armario_4 INTEGER NOT NULL,
+armario_5 INTEGER NOT NULL,
+armario_6 INTEGER NOT NULL,
+armario_7 INTEGER NOT NULL,
+armario_8 INTEGER NOT NULL,
+armario_9 INTEGER NOT NULL,
+armario_3d INTEGER NOT NULL);
 
 .quit
 ```
@@ -60,3 +59,20 @@ Lanzar aplicación web en localhost:
 ```sh
 php -S 0.0.0.0:8080 # acceder a http://localhost:8080/
 ```
+
+
+
+
+
+      <!-- Selección de tarjeta -->
+      <div class="userinfo">
+        <label>Tarjeta:</label>
+        <select id="seleccion" name="id_tarjeta">
+          <option value=<?php echo $tarjeta['id_tarjeta'] ?>>------</option>
+          <?php
+            while ($tarjeta = $tarjetas->fetchArray()) {
+              echo '<option value="'.$tarjeta['id_tarjeta'].'">'.$tarjeta['id_tarjeta'].'<br>'.'</option>';
+            }
+          ?>
+        </select>
+      </div>
