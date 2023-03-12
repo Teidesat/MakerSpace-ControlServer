@@ -64,15 +64,3 @@ php -S 0.0.0.0:8080 # acceder a http://localhost:8080/
 
 
 
-      <!-- Selección de tarjeta -->
-      <div class="userinfo">
-        <label>Tarjeta:</label>
-        <select id="seleccion" name="id_tarjeta">
-          <option value=<?php echo $tarjeta['id_tarjeta'] ?>>------</option>
-          <?php
-            while ($tarjeta = $tarjetas->fetchArray()) {
-              echo '<option value="'.$tarjeta['id_tarjeta'].'">'.$tarjeta['id_tarjeta'].'<br>'.'</option>';
-            }
-          ?>
-        </select>
-      </div>

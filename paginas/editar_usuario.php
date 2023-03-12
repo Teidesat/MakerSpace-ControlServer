@@ -16,9 +16,9 @@
       $id_usuario = $_GET["id"];
 
       // Datos de las tarjetas registradas
-      //$consulta = "SELECT * FROM tarjetas;";
-      //$tarjetas = $db->query($consulta);
-      //if(!$tarjetas) {die($db->lastErrorMsg());}
+      $consulta = "SELECT * FROM tarjetas;";
+      $tarjetas = $db->query($consulta);
+      if(!$tarjetas) {die($db->lastErrorMsg());}
 
       // Recuperar datos de usuarios
       $consulta = "SELECT * FROM usuarios WHERE id_usuario = $id_usuario;";
@@ -31,12 +31,12 @@
       $resultado = $db->query($consulta);
       if(!$resultado) {die($db->lastErrorMsg());}
       $permisos = $resultado->fetchArray();
-      $db->close();
+      //$db->close();
 
       // Gardado de los nuevos datos
       if($_SERVER['REQUEST_METHOD'] == 'POST') {
         
-        $db = new SQLite3('./../bbdd/acceso_makerspace.db');
+        //$db = new SQLite3('./../bbdd/acceso_makerspace.db');
         // si pulsa botón guardar
         if(isset($_POST['guardar'])) {
 
@@ -45,15 +45,15 @@
           $apellidos = $_POST['apellidos'];
           $correo = $_POST['correo'];
           $rol = $_POST['rol'];
-          //$id_tarjeta = $_POST['id_tarjeta'];
-          //$consulta = "UPDATE usuarios SET nombre = '$nombre', apellidos = '$apellidos', correo = '$correo', rol = '$rol', id_tarjeta = '$id_tarjeta' WHERE id_usuario = $id_usuario;";
-          $consulta = "UPDATE usuarios SET nombre = '$nombre', apellidos = '$apellidos', correo = '$correo', rol = '$rol' WHERE id_usuario = $id_usuario;";
+          $id_tarjeta = $_POST['id_tarjeta'];
+          $consulta = "UPDATE usuarios SET nombre = '$nombre', apellidos = '$apellidos', correo = '$correo', rol = '$rol', id_tarjeta = '$id_tarjeta' WHERE id_usuario = $id_usuario;";
+          //$consulta = "UPDATE usuarios SET nombre = '$nombre', apellidos = '$apellidos', correo = '$correo', rol = '$rol' WHERE id_usuario = $id_usuario;";
           $resultado = $db->query($consulta);
           if(!$resultado) {die($db->lastErrorMsg());}
   
           // Actualizar permisos del usuario
           $entrada = (isset($_POST['entrada']) == 1) ? 1 : 0;
-          $almacen = (isset($_POST['alamcen']) == 1) ? 1 : 0;
+          $almacen = (isset($_POST['almacen']) == 1) ? 1 : 0;
           $armario_1 = (isset($_POST['armario_1']) == 1) ? 1 : 0;
           $armario_2 = (isset($_POST['armario_2']) == 1) ? 1 : 0;
           $armario_3 = (isset($_POST['armario_3']) == 1) ? 1 : 0;
@@ -100,8 +100,6 @@
           echo "Usuario eliminado con éxito!";
         } 
         $db->close();
-
-        
       }
     ?>
 
@@ -123,7 +121,18 @@
     
 
 
-
+            <!-- Selección de tarjeta -->
+      <div class="userinfo">
+        <label>Tarjeta:</label>
+        <select id="seleccion" name="id_tarjeta">
+          <option value=<?php echo $tarjeta['id_tarjeta'] ?>><?php echo $tarjeta['id_tarjeta'] ?></option>
+          <?php
+            while ($tarjeta = $tarjetas->fetchArray()) {
+              echo '<option value="'.$tarjeta['id_tarjeta'].'">'.$tarjeta['id_tarjeta'].'<br>'.'</option>';
+            }
+          ?>
+        </select>
+      </div>
 
 
 
