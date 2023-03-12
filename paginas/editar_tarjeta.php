@@ -65,7 +65,7 @@
       <div class="userinfo">ID Tarjeta:
         <input type="text" name="id_tarjeta" value=<?php echo $tarjeta['id_tarjeta']?> required>
       </div> 
-      <div class="userinfo">Contrasena:
+      <div class="userinfo">Contraseña:
         <input type="text" name="contrasena" value=<?php echo $tarjeta['contrasena']?> required>
       </div> 
 

@@ -35,7 +35,7 @@
       <table >
         <tr id='index'>
           <th>ID Tarjeta</th>
-          <th>Contrasena</th>
+          <th>Contraseña</th>
         </tr>
       <?php
         //mostrar las filas de la tabla de usuarios

@@ -1,6 +1,14 @@
 # MakerSpace Servidor Control de Acceso
 
-## Instalar sqlite3 (base de datos), php-cli (servidor web php), php-sqlite (conector php y sqlite3)
+Web y base de datos para almacenar la información de los usuarios y las tarjetas para el control de acceso al MakerSpace.
+
+## Instalar programas
+
+Programas requeridos para ejecutar la web y la base de datos:
+
+- sqlite3 (base de datos) 
+- php-cli (servidor web php)
+- php-sqlite (conector php y sqlite3)
 
 ```sh
 sudo apt install sqlite3
@@ -10,17 +18,15 @@ sudo apt-get install php8.1-sqlite   # Si se cuenta con otra versión de php mod
 
 ## Instrucciones para crear la base de datos
 
-Crear base de datos o acceder a la base de datos si ya existe el fichero
-
-Schema de la base de datos (instrucciones para crear las tablas) si no existe. Mirar primero en '/bbdd' si ya existe el fichero
+Crear base de datos o acceder a la base de datos si ya existe el fichero (Tener en cuenta que la que se encuentra en el repo contiene datos de prueba).
 
 ```sh
 sqlite3 ./bbdd/acceso_makerspace.db # ejecutar en el directorio principal ./MakerSpace-ControlServer
 ```
 
-```sql
+### Schema de la base de datos (instrucciones para crear las tablas) si no existe. Mirar primero en '/bbdd' si ya existe el fichero
 
-pragma foreign_keys = on;  -- ejecutar exta instruccion cada vez que se acceda directamente a la base de datos para forzar la foreing key
+```sql
 
 CREATE TABLE tarjetas(
 id_tarjeta TEXT PRIMARY KEY,
@@ -59,8 +65,3 @@ Lanzar aplicación web en localhost:
 ```sh
 php -S 0.0.0.0:8080 # acceder a http://localhost:8080/
 ```
-
-
-
-
-

@@ -125,7 +125,7 @@
       <div class="userinfo">
         <label>Tarjeta:</label>
         <select id="seleccion" name="id_tarjeta">
-          <option value=<?php echo $tarjeta['id_tarjeta'] ?>><?php echo $tarjeta['id_tarjeta'] ?></option>
+          <option value=<?php echo $tarjeta['id_tarjeta'] ?>>------</option>
           <?php
             while ($tarjeta = $tarjetas->fetchArray()) {
               echo '<option value="'.$tarjeta['id_tarjeta'].'">'.$tarjeta['id_tarjeta'].'<br>'.'</option>';
