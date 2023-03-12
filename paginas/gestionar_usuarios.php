@@ -23,6 +23,7 @@
       <select id="opcion" onchange="redirigirEdicionUsuario()">
         <option value="">------</option>
         <?php
+          $resultado = $db->query("SELECT * FROM usuarios;");
           while ($usuario = $resultado->fetchArray()) {
             echo '<option value="'.$usuario['id_usuario'].'">'.$usuario['nombre'].' '.$usuario['apellidos'].'<br>'.'</option>';
           }
@@ -39,7 +40,6 @@
           <th>Apellidos</th>
           <th>Correo</th>
           <th>Rol</th>
-          <th>ID Tarjeta</th>
         </tr>
       <?php
         //mostrar las filas de la tabla de usuarios
@@ -50,7 +50,6 @@
             echo '<td>'.$usuario['apellidos'].'</td>';
             echo '<td>'.$usuario['correo'].'</td>';
             echo '<td>'.$usuario['rol'].'</td>';
-            echo '<td>'.$usuario['id_tarjeta'].'</td>';
           echo '</tr>';
         }
         $db->close();

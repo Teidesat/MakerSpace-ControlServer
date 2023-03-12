@@ -15,24 +15,16 @@
 
       $db = new SQLite3('./../bbdd/acceso_makerspace.db');
 
-      // Datos de las tarjetas registradas
-      $consulta = "SELECT * FROM tarjetas";
-      $resultado = $db->query($consulta);
-      if(!$resultado) {die($db->lastErrorMsg());}
-
       // Guardar datos si el botón de guardado es pulsado
       if($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Obtener nuevo id_usuario
-        $consulta = "SELECT max(id_usuario) FROM usuarios";
-        $siguiente_id = intval($db->query($consulta)->fetchArray()[0]) + 1;
 
         // Guardar datos del ususario
+        $id_usuario = $_POST['id_usuario'];
         $nombre = $_POST['nombre'];
         $apellidos = $_POST['apellidos'];
         $correo = $_POST['correo'];
         $rol = $_POST['rol'];
-        $id_tarjeta = $_POST['id_tarjeta'];
-        $consulta = "INSERT INTO usuarios (id_usuario, nombre, apellidos, correo, rol, id_tarjeta) VALUES ($siguiente_id, '$nombre', '$apellidos', '$correo', '$rol', '$id_tarjeta')";
+        $consulta = "INSERT INTO usuarios (id_usuario, nombre, apellidos, correo, rol) VALUES ('$id_usuario', '$nombre', '$apellidos', '$correo', '$rol');";
         $resultado = $db->query($consulta);
         if (!$resultado) {die($db->lastErrorMsg());}
 
@@ -49,7 +41,7 @@
         $armario_8 = (isset($_POST['armario_8']) == 1) ? 1 : 0;
         $armario_9 = (isset($_POST['armario_9']) == 1) ? 1 : 0;
         $armario_3d = (isset($_POST['armario_3d']) == 1) ? 1 : 0;
-        $consulta = "INSERT INTO permisos (id_usuario, entrada, almacen, armario_1, armario_2, armario_3, armario_4, armario_5, armario_6, armario_7, armario_8, armario_9, armario_3d) VALUES ($siguiente_id, $entrada, $almacen, $armario_1, $armario_2, $armario_3, $armario_4, $armario_5, $armario_6, $armario_7, $armario_8, $armario_9, $armario_3d)";
+        $consulta = "INSERT INTO permisos (id_usuario, entrada, almacen, armario_1, armario_2, armario_3, armario_4, armario_5, armario_6, armario_7, armario_8, armario_9, armario_3d) VALUES ('$id_usuario', $entrada, $almacen, $armario_1, $armario_2, $armario_3, $armario_4, $armario_5, $armario_6, $armario_7, $armario_8, $armario_9, $armario_3d)";
         $resultado = $db->query($consulta);
         
         $db->close();
@@ -61,6 +53,10 @@
     <!-- Formulario con los datos y los permisos del usuario -->
     <form method="POST" action="anadir_usuario.php">
       <!-- Datos del usuario -->
+      <!-- Selección de tarjeta -->
+      <div class="userinfo">id_usuario:
+        <input type="text" name="id_usuario">
+      </div>
       <div class="userinfo">Nombre:
         <input type="text" name="nombre" required>
       </div> 
@@ -74,18 +70,6 @@
         <input type="text" name="rol">
       </div>
       
-      <!-- Selección de tarjeta -->
-      <div class="userinfo">
-        <label>Tarjeta:</label>
-        <select id="seleccion" name="id_tarjeta">
-          <option value="">------</option>
-          <?php
-            while ($tarjeta = $resultado->fetchArray()) {
-              echo '<option value="'.$tarjeta['id_tarjeta'].'">'.$tarjeta['id_tarjeta'].'<br>'.'</option>';
-            }
-          ?>
-        </select>
-      </div>
 
       <!-- Permisos del usuario -->
       <div class="userinfo">Permisos:</div>
