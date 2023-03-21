@@ -11,7 +11,7 @@
 
     <!-- Acceso a la base de datos de usuarios y consultas-->
     <?php
-      $db = pg_connect("host=localhost port=5432 user=postgres password=postgres") or die("Could not connect");
+      $db = pg_connect("host=localhost port=5432 dbname=makerspacecontrol user=postgres password=postgres") or die("Could not connect");
       $consulta = "SELECT * FROM usuarios";
       $resultado = pg_query($consulta);
     ?>
