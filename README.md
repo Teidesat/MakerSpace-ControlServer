@@ -26,6 +26,7 @@ CREATE DATABASE makerspaceControl;
 
 CREATE TABLE usuarios(
 uid TEXT PRIMARY KEY,
+passwd TEXT NOT NULL,
 nombre TEXT,
 apellidos TEXT,
 correo TEXT,
@@ -52,6 +53,7 @@ armario_3d INTEGER NOT NULL);
 
 Launch web service with php-cli
 ```sh
+sudo service postgresql start
 sudo apt install php-cli
 php -S 0.0.0.0:8080 # acceder a http://localhost:8080/
 ```

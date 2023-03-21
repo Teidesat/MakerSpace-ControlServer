@@ -11,14 +11,9 @@
 
     <!-- Acceso a la base de datos de usuarios y consultas-->
     <?php
-      $db = pg_connect("host=localhost port=5432") or die("Could not connect");
-
-      $stat = pg_connection_status($dbconn);
-      if ($stat === PGSQL_CONNECTION_OK) {echo 'Connection status ok';} 
-      else {echo 'Connection status bad';}    
+      $db = pg_connect("host=localhost port=5432 user=postgres password=postgres") or die("Could not connect");
       $consulta = "SELECT * FROM usuarios";
-      //$resultado = pg_query($consulta);
-      //if(!$resultado) {die($db->lastErrorMsg());}
+      $resultado = pg_query($consulta);
     ?>
 
     <!-- Lista de usuarios para modificar -->
@@ -27,10 +22,10 @@
       <select id="opcion" onchange="redirigirEdicionUsuario()">
         <option value="">------</option>
         <?php
-          /*$resultado = pg_query("SELECT * FROM usuarios;");
-          while ($usuario = $resultado->fetchArray()) {
-            echo '<option value="'.$usuario['uid'].'">'.$usuario['nombre'].' '.$usuario['apellidos'].'<br>'.'</option>';
-          }*/
+          $resultado = pg_query("SELECT * FROM usuarios;");
+          while ($usuario = pg_fetch_row($resultado)) {
+            echo '<option value="'.$usuario[0].'">'.$usuario[1].' '.$usuario[2].'<br>'.'</option>';
+          }
         ?>
       </select>
     </form>
@@ -47,16 +42,16 @@
         </tr>
       <?php
         //mostrar las filas de la tabla de usuarios
-        /*while ($usuario = $resultado->fetchArray()) {
+        $resultado = pg_query("SELECT * FROM usuarios;");
+        while ($usuario = pg_fetch_row($resultado)) {
           echo '<tr>';
-            echo '<td>'.$usuario['uid'].'</td>';
-            echo '<td>'.$usuario['nombre'].'</td>';
-            echo '<td>'.$usuario['apellidos'].'</td>';
-            echo '<td>'.$usuario['correo'].'</td>';
-            echo '<td>'.$usuario['rol'].'</td>';
+            echo '<td>'.$usuario[0].'</td>';
+            echo '<td>'.$usuario[1].'</td>';
+            echo '<td>'.$usuario[2].'</td>';
+            echo '<td>'.$usuario[3].'</td>';
+            echo '<td>'.$usuario[4].'</td>';
           echo '</tr>';
-        }*/
-        //$db->close();
+        }
       ?>
       </table>
     </div>
