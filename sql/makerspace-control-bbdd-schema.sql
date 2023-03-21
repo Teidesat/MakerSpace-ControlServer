@@ -1,7 +1,13 @@
-CREATE DATABASE makerspaceControl;
+CREATE DATABASE makerspacecontrol;
+
+\c makerspacecontrol
+
+alter database makerspacecontrol owner to postgres;
+grant all privileges on database makerspacecontrol to postgres;
 
 CREATE TABLE usuarios(
 uid TEXT PRIMARY KEY,
+passwd TEXT NOT NULL,
 nombre TEXT,
 apellidos TEXT,
 correo TEXT,
@@ -21,4 +27,3 @@ armario_7 INTEGER NOT NULL,
 armario_8 INTEGER NOT NULL,
 armario_9 INTEGER NOT NULL,
 armario_3d INTEGER NOT NULL);
-
