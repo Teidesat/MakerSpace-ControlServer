@@ -3,11 +3,10 @@
 <!DOCTYPE html>
 <link rel="stylesheet" href="./css/content.css">
 <html>
-  <?php include('./html/cabeza.html')?>
+
 
   <body>
-    <?php include('./html/cabecera.html')?>
-    <?php include('./html/barra-navegacion.html')?>
+
 
 
 
@@ -20,10 +19,10 @@
         $lockerLen = 7;
         $data = $_SERVER["QUERY_STRING"];
         $uid = substr($data, $uidLen, stripos($data, "&") - 1);
-        $locker = substr($data, stripos($data, "&") + 1 + $userLen, strlen($data));
-        $db = new SQLite3('../bbdd/makerspace.db');
+        $locker = substr($data, stripos($data, "&") + 1 + $uidLen, strlen($data));
+        $db = new SQLite3('../bbdd/acceso_makerspace.db');
         // Selecciona el nombre del usuario que tenga permiso en ese armario con esa tarjeta
-        $query = "SELECT CONCAT(nombre, apellidos) FROM usuarios natural join permisos WHERE armario_$locker = 1 and card_id = '$uid';";
+        $query = "SELECT nombre FROM usuarios natural join permisos WHERE armario_1 = 1 and id_usuario = '$uid';";
         $resultado = $db->query($query);
         if (!$resultado) {die($db->lastErrorMsg());} else {
           $user = $resultado->fetchArray();
@@ -31,7 +30,11 @@
 
         $db->close();
         // Envia el resultado al cliente
-        joson_encode(array('usuario'=>$user));
+        // joson_encode(array('usuario'=>$user));
+        // devolver la respuesta al cliente
+        header('Content-Type: text/plain');
+        header('HTTP/1.1 200 OK');
+        echo "Alvaro";
       }
     ?>
   </body>
