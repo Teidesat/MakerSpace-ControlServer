@@ -12,12 +12,11 @@
     <button class="button" onclick="location.href='gestionar_usuarios.php'">Volver atrás</button>
    
     <?php
-      $db = new SQLite3('./../bbdd/acceso_makerspace.db');
+      $db = pg_connect("host=localhost port=5432 dbname=makerspaceControl user=postgres password=admin123");
       
       // Gardado de los nuevos datos
       if($_SERVER['REQUEST_METHOD'] == 'POST') {
         
-        //$db = new SQLite3('./../bbdd/acceso_makerspace.db');
         // si pulsa botón guardar
         if(isset($_POST['guardar'])) {
           
@@ -28,7 +27,7 @@
           $correo = $_POST['correo'];
           $rol = $_POST['rol'];
           $consulta = "UPDATE usuarios SET nombre = '$nombre', apellidos = '$apellidos', correo = '$correo', rol = '$rol' WHERE id_usuario = '$id_usuario';";
-          $resultado = $db->query($consulta);
+          $resultado = $db->pg_query($consulta);
           if(!$resultado) {die($db->lastErrorMsg());}
           
           // Actualizar permisos del usuario
@@ -45,8 +44,8 @@
           $armario_9 = (isset($_POST['armario_9']) == 1) ? 1 : 0;
           $armario_3d = (isset($_POST['armario_3d']) == 1) ? 1 : 0;
           $consulta = "UPDATE permisos SET entrada = $entrada, almacen = $almacen, armario_1 = $armario_1, armario_2 = $armario_2, armario_3 = $armario_3, armario_4 = $armario_4, armario_5 = $armario_5, armario_6 = $armario_6, armario_7 = $armario_7, armario_8 = $armario_8, armario_9 = $armario_9, armario_3d = $armario_3d WHERE id_usuario = '$id_usuario';";
-          $resultado = $db->query($consulta);
-          if(!$resultado) {die($db->lastErrorMsg());}
+          $resultado = $db->pg_query($consulta);
+          //if(!$resultado) {die($db->lastErrorMsg());}
           
           echo "Usuario modificado con éxito!";
           
@@ -56,31 +55,32 @@
           // Borrar usuario
           $consulta = "DELETE FROM usuarios WHERE id_usuario = '$id_usuario';";
           $resultado = $db->query($consulta);
-          if(!$resultado) {die($db->lastErrorMsg());}
+          //if(!$resultado) {die($db->lastErrorMsg());}
           
           // Borrar permisos del usuario
           $consulta = "DELETE FROM permisos WHERE id_usuario = '$id_usuario';";
           $resultado = $db->query($consulta);
-          if(!$resultado) {die($db->lastErrorMsg());}
+          //if(!$resultado) {die($db->lastErrorMsg());}
           
           echo "Usuario eliminado con éxito!";
         } 
-        $db->close();
+        //$db->close();
       }
       
+      // Mostrar datos de los usuarios
       $id_usuario = $_GET["id"];
       // Recuperar datos de usuarios
       $consulta = "SELECT * FROM usuarios WHERE id_usuario = '$id_usuario';";
       $resultado = $db->query($consulta);
-      if(!$resultado) {die($db->lastErrorMsg());}
+      //if(!$resultado) {die($db->lastErrorMsg());}
       $usuario = $resultado->fetchArray();
       
       // Recuperar datos de permisos
       $consulta = "SELECT * FROM permisos WHERE id_usuario = '$id_usuario';";
       $resultado = $db->query($consulta);
-      if(!$resultado) {die($db->lastErrorMsg());}
+      //if(!$resultado) {die($db->lastErrorMsg());}
       $permisos = $resultado->fetchArray();
-      $db->close();
+      //$db->close();
     ?>
     <!-- Información del usuario a almacenar -->
     <form method="POST" action="editar_usuario.php?id=<?php echo $id_usuario?>">

@@ -11,10 +11,14 @@
 
     <!-- Acceso a la base de datos de usuarios y consultas-->
     <?php
-      $db = new SQLite3('./../bbdd/acceso_makerspace.db');
+      $db = pg_connect("host=localhost port=5432") or die("Could not connect");
+
+      $stat = pg_connection_status($dbconn);
+      if ($stat === PGSQL_CONNECTION_OK) {echo 'Connection status ok';} 
+      else {echo 'Connection status bad';}    
       $consulta = "SELECT * FROM usuarios";
-      $resultado = $db->query($consulta);
-      if(!$resultado) {die($db->lastErrorMsg());}
+      //$resultado = pg_query($consulta);
+      //if(!$resultado) {die($db->lastErrorMsg());}
     ?>
 
     <!-- Lista de usuarios para modificar -->
@@ -23,10 +27,10 @@
       <select id="opcion" onchange="redirigirEdicionUsuario()">
         <option value="">------</option>
         <?php
-          $resultado = $db->query("SELECT * FROM usuarios;");
+          /*$resultado = pg_query("SELECT * FROM usuarios;");
           while ($usuario = $resultado->fetchArray()) {
-            echo '<option value="'.$usuario['id_usuario'].'">'.$usuario['nombre'].' '.$usuario['apellidos'].'<br>'.'</option>';
-          }
+            echo '<option value="'.$usuario['uid'].'">'.$usuario['nombre'].' '.$usuario['apellidos'].'<br>'.'</option>';
+          }*/
         ?>
       </select>
     </form>
@@ -43,16 +47,16 @@
         </tr>
       <?php
         //mostrar las filas de la tabla de usuarios
-        while ($usuario = $resultado->fetchArray()) {
+        /*while ($usuario = $resultado->fetchArray()) {
           echo '<tr>';
-            echo '<td>'.$usuario['id_usuario'].'</td>';
+            echo '<td>'.$usuario['uid'].'</td>';
             echo '<td>'.$usuario['nombre'].'</td>';
             echo '<td>'.$usuario['apellidos'].'</td>';
             echo '<td>'.$usuario['correo'].'</td>';
             echo '<td>'.$usuario['rol'].'</td>';
           echo '</tr>';
-        }
-        $db->close();
+        }*/
+        //$db->close();
       ?>
       </table>
     </div>
