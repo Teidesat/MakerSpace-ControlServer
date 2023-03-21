@@ -46,10 +46,10 @@
         while ($usuario = pg_fetch_row($resultado)) {
           echo '<tr>';
             echo '<td>'.$usuario[0].'</td>';
-            echo '<td>'.$usuario[1].'</td>';
             echo '<td>'.$usuario[2].'</td>';
             echo '<td>'.$usuario[3].'</td>';
             echo '<td>'.$usuario[4].'</td>';
+            echo '<td>'.$usuario[5].'</td>';
           echo '</tr>';
         }
       ?>
