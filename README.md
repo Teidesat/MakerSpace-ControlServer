@@ -24,6 +24,11 @@ Database schema here can be also view in the 'sql/makerspace-controlserver-bbdd-
 ```sql
 CREATE DATABASE makerspaceControl;
 
+\c makerspaceControl
+
+alter database makerspacecontrol owner to postgres;
+grant all privileges on database makerspaceControl to postgres;
+
 CREATE TABLE usuarios(
 uid TEXT PRIMARY KEY,
 passwd TEXT NOT NULL,
