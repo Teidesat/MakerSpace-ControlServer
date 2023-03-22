@@ -13,20 +13,19 @@
     <!-- Si pulsa botón de guardar ejecutar código para almacenar datos en la base de datos -->
     <?php
 
-      $db = new SQLite3('./../bbdd/acceso_makerspace.db');
+      $db = pg_connect("host=localhost port=5432 dbname=makerspacecontrol user=postgres password=postgres") or die("Could not connect");
 
       // Guardar datos si el botón de guardado es pulsado
       if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Guardar datos del ususario
-        $id_usuario = $_POST['id_usuario'];
+        $uid = $_POST['uid'];
         $nombre = $_POST['nombre'];
         $apellidos = $_POST['apellidos'];
         $correo = $_POST['correo'];
         $rol = $_POST['rol'];
-        $consulta = "INSERT INTO usuarios (id_usuario, nombre, apellidos, correo, rol) VALUES ('$id_usuario', '$nombre', '$apellidos', '$correo', '$rol');";
-        $resultado = $db->query($consulta);
-        if (!$resultado) {die($db->lastErrorMsg());}
+        $consulta = "INSERT INTO usuarios VALUES ('$uid', 'F', '$nombre', '$apellidos', '$correo', '$rol');";
+        $resultado = pg_query($consulta);
 
         // Guardar permisos del usuario
         $entrada = (isset($_POST['entrada']) == 1) ? 1 : 0;
@@ -41,10 +40,10 @@
         $armario_8 = (isset($_POST['armario_8']) == 1) ? 1 : 0;
         $armario_9 = (isset($_POST['armario_9']) == 1) ? 1 : 0;
         $armario_3d = (isset($_POST['armario_3d']) == 1) ? 1 : 0;
-        $consulta = "INSERT INTO permisos (id_usuario, entrada, almacen, armario_1, armario_2, armario_3, armario_4, armario_5, armario_6, armario_7, armario_8, armario_9, armario_3d) VALUES ('$id_usuario', $entrada, $almacen, $armario_1, $armario_2, $armario_3, $armario_4, $armario_5, $armario_6, $armario_7, $armario_8, $armario_9, $armario_3d)";
-        $resultado = $db->query($consulta);
         
-        $db->close();
+        $consulta = "INSERT INTO permisos (uid, entrada, almacen, armario_1, armario_2, armario_3, armario_4, armario_5, armario_6, armario_7, armario_8, armario_9, armario_3d) VALUES ('$uid', $entrada, $almacen, $armario_1, $armario_2, $armario_3, $armario_4, $armario_5, $armario_6, $armario_7, $armario_8, $armario_9, $armario_3d)";
+        $resultado = pg_query($consulta);
+
         echo "¡Usuario añadido!";
       }
     ?>
@@ -54,8 +53,8 @@
     <form method="POST" action="anadir_usuario.php">
       <!-- Datos del usuario -->
       <!-- Selección de tarjeta -->
-      <div class="userinfo">id_usuario:
-        <input type="text" name="id_usuario">
+      <div class="userinfo">ID tarjeta:
+        <input type="text" name="uid">
       </div>
       <div class="userinfo">Nombre:
         <input type="text" name="nombre" required>
@@ -118,4 +117,3 @@
     </form>
   </body>
 </html>
-
