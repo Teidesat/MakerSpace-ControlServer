@@ -12,24 +12,26 @@
     <button class="button" onclick="location.href='gestionar_usuarios.php'">Volver atrás</button>
    
     <?php
-      $db = new SQLite3('./../bbdd/acceso_makerspace.db');
+      $db = pg_connect("host=localhost port=5432 dbname=makerspacecontrol user=postgres password=postgres") or die("Could not connect");
       
+      // ID de la tarjeta
+      $uid = $_GET["id"];
+      
+
       // Gardado de los nuevos datos
       if($_SERVER['REQUEST_METHOD'] == 'POST') {
         
-        //$db = new SQLite3('./../bbdd/acceso_makerspace.db');
         // si pulsa botón guardar
         if(isset($_POST['guardar'])) {
           
           // Actualizar datos del usuario
-          $id_usuario = $_POST['id_usuario'];
+          $uid = $_POST['uid'];
           $nombre = $_POST['nombre'];
           $apellidos = $_POST['apellidos'];
           $correo = $_POST['correo'];
           $rol = $_POST['rol'];
-          $consulta = "UPDATE usuarios SET nombre = '$nombre', apellidos = '$apellidos', correo = '$correo', rol = '$rol' WHERE id_usuario = '$id_usuario';";
-          $resultado = $db->query($consulta);
-          if(!$resultado) {die($db->lastErrorMsg());}
+          $consulta = "UPDATE usuarios SET nombre = '$nombre', apellidos = '$apellidos', correo = '$correo', rol = '$rol' WHERE uid = '$uid';";
+          $resultado = pg_query($consulta);
           
           // Actualizar permisos del usuario
           $entrada = (isset($_POST['entrada']) == 1) ? 1 : 0;
@@ -44,101 +46,95 @@
           $armario_8 = (isset($_POST['armario_8']) == 1) ? 1 : 0;
           $armario_9 = (isset($_POST['armario_9']) == 1) ? 1 : 0;
           $armario_3d = (isset($_POST['armario_3d']) == 1) ? 1 : 0;
-          $consulta = "UPDATE permisos SET entrada = $entrada, almacen = $almacen, armario_1 = $armario_1, armario_2 = $armario_2, armario_3 = $armario_3, armario_4 = $armario_4, armario_5 = $armario_5, armario_6 = $armario_6, armario_7 = $armario_7, armario_8 = $armario_8, armario_9 = $armario_9, armario_3d = $armario_3d WHERE id_usuario = '$id_usuario';";
-          $resultado = $db->query($consulta);
-          if(!$resultado) {die($db->lastErrorMsg());}
+          $consulta = "UPDATE permisos SET entrada = $entrada, almacen = $almacen, armario_1 = $armario_1, armario_2 = $armario_2, armario_3 = $armario_3, armario_4 = $armario_4, armario_5 = $armario_5, armario_6 = $armario_6, armario_7 = $armario_7, armario_8 = $armario_8, armario_9 = $armario_9, armario_3d = $armario_3d WHERE uid = '$uid';";
+          $resultado = pg_query($consulta);
           
           echo "Usuario modificado con éxito!";
           
-          // Si pulsa botón borrar
+        // Si pulsa botón borrar
         } elseif (isset($_POST['borrar'])) {
-          $id_usuario = $_POST['id_usuario'];
-          // Borrar usuario
-          $consulta = "DELETE FROM usuarios WHERE id_usuario = '$id_usuario';";
-          $resultado = $db->query($consulta);
-          if(!$resultado) {die($db->lastErrorMsg());}
+          $uid = $_POST['uid'];
+          // Borrar usuario (permisos se borran en cascada)
+          $consulta = "DELETE FROM usuarios WHERE uid = '$uid';";
+          $resultado = pg_query($consulta);
+
           
           // Borrar permisos del usuario
-          $consulta = "DELETE FROM permisos WHERE id_usuario = '$id_usuario';";
-          $resultado = $db->query($consulta);
-          if(!$resultado) {die($db->lastErrorMsg());}
-          
+          //$consulta = "DELETE FROM permisos WHERE id_usuario = '$id_usuario';";
+          //$resultado = pg_query($consulta);
+
           echo "Usuario eliminado con éxito!";
         } 
-        $db->close();
       }
       
-      $id_usuario = $_GET["id"];
       // Recuperar datos de usuarios
-      $consulta = "SELECT * FROM usuarios WHERE id_usuario = '$id_usuario';";
-      $resultado = $db->query($consulta);
-      if(!$resultado) {die($db->lastErrorMsg());}
-      $usuario = $resultado->fetchArray();
+      $consulta = "SELECT * FROM usuarios WHERE uid = '$uid';";
+      $resultado = pg_query($consulta);
+      $usuario = pg_fetch_row($resultado);
       
       // Recuperar datos de permisos
-      $consulta = "SELECT * FROM permisos WHERE id_usuario = '$id_usuario';";
-      $resultado = $db->query($consulta);
-      if(!$resultado) {die($db->lastErrorMsg());}
-      $permisos = $resultado->fetchArray();
-      $db->close();
+      $consulta = "SELECT * FROM permisos WHERE uid = '$uid';";
+      $resultado = pg_query($consulta);
+      $permisos = pg_fetch_row($resultado);
+
     ?>
     <!-- Información del usuario a almacenar -->
-    <form method="POST" action="editar_usuario.php?id=<?php echo $id_usuario?>">
+    <form method="POST" action="editar_usuario.php?id=<?php echo $uid?>">
       <!-- Atributos del usuario-->
-      <div class="userinfo">Id de usuario:
-        <input type="text" name="id_usuario" value=<?php echo $usuario['id_usuario']?> required>
+      <div class="userinfo">
+        ID tarjeta: <?php echo $usuario[0]?>
       </div> 
       <div class="userinfo">Nombre:
-        <input type="text" name="nombre" value=<?php echo $usuario['nombre']?> required>
+        <input type="text" name="nombre" value=<?php echo $usuario[2]?> required>
       </div> 
       <div class="userinfo">Apellidos:
-        <input type="text" name="apellidos" value=<?php echo $usuario['apellidos']?> required>                    <!-- Error con que solo aparece un apellido al modificar -->
+        <input type="text" name="apellidos" value=<?php echo $usuario[3]?> required>                    <!-- Error con que solo aparece un apellido al modificar -->
       </div> 
       <div class="userinfo">Correo Electrónico:
-        <input type="text" name="correo" value=<?php echo $usuario['correo']?> required>
+        <input type="text" name="correo" value=<?php echo $usuario[4]?> required>
       </div> 
       <div class="userinfo">Rol:
-        <input type="text" name="rol" value=<?php echo $usuario['rol']?>>
+        <input type="text" name="rol" value=<?php echo $usuario[5]?>>
       </div>
       
       <!-- Permisos del usuario -->
       <div class="userinfo">Permisos:</div>
       <div class="permisos">
         <label>Entrada</label>
-        <input type="checkbox" name="entrada" <?php echo ($permisos['entrada'] == 1) ? 'checked' : ''; ?>><br>
+        <input type="checkbox" name="entrada" <?php echo ($permisos[1] == 1) ? 'checked' : ''; ?>><br>
         
         <label>Almacén</label>
-        <input type="checkbox" name="almacen" <?php echo ($permisos['almacen'] == 1) ? 'checked' : ''; ?>><br>
+        <input type="checkbox" name="almacen" <?php echo ($permisos[2] == 1) ? 'checked' : ''; ?>><br>
         
         <label>Armario 1</label>
-        <input type="checkbox" name="armario_1" <?php echo ($permisos['armario_1'] == 1) ? 'checked' : ''; ?>><br>
+        <input type="checkbox" name="armario_1" <?php echo ($permisos[3] == 1) ? 'checked' : ''; ?>><br>
         
         <label>Armario 2</label>
-        <input type="checkbox" name="armario_2" <?php echo ($permisos['armario_2'] == 1) ? 'checked' : ''; ?>><br>
+        <input type="checkbox" name="armario_2" <?php echo ($permisos[4] == 1) ? 'checked' : ''; ?>><br>
         
         <label>Armario 3</label>
-        <input type="checkbox" name="armario_3" <?php echo ($permisos['armario_3'] == 1) ? 'checked' : ''; ?>><br>
+        <input type="checkbox" name="armario_3" <?php echo ($permisos[5] == 1) ? 'checked' : ''; ?>><br>
         
         <label>Armario 4</label>
-        <input type="checkbox" name="armario_4" <?php echo ($permisos['armario_4'] == 1) ? 'checked' : ''; ?>><br>
+        <input type="checkbox" name="armario_4" <?php echo ($permisos[6] == 1) ? 'checked' : ''; ?>><br>
         
         <label>Armario 5</label>
-        <input type="checkbox" name="armario_5" <?php echo ($permisos['armario_5'] == 1) ? 'checked' : ''; ?>><br>
+        <input type="checkbox" name="armario_5" <?php echo ($permisos[7] == 1) ? 'checked' : ''; ?>><br>
         
         <label>Armario 6</label>
-        <input type="checkbox" name="armario_6" <?php echo ($permisos['armario_6'] == 1) ? 'checked' : ''; ?>><br>
+        <input type="checkbox" name="armario_6" <?php echo ($permisos[8] == 1) ? 'checked' : ''; ?>><br>
         
         <label>Armario 7</label>
-        <input type="checkbox" name="armario_7" <?php echo ($permisos['armario_7'] == 1) ? 'checked' : ''; ?>><br>
+        <input type="checkbox" name="armario_7" <?php echo ($permisos[9] == 1) ? 'checked' : ''; ?>><br>
         
         <label>Armario 8</label>
-        <input type="checkbox" name="armario_8" <?php echo ($permisos['armario_8'] == 1) ? 'checked' : ''; ?>><br>
+        <input type="checkbox" name="armario_8" <?php echo ($permisos[10] == 1) ? 'checked' : ''; ?>><br>
         
         <label>Armario 9</label>
-        <input type="checkbox" name="armario_9" <?php echo ($permisos['armario_9'] == 1) ? 'checked' : ''; ?>><br>
+        <input type="checkbox" name="armario_9" <?php echo ($permisos[11] == 1) ? 'checked' : ''; ?>><br>
         
         <label>Impresoras 3D</label>
-        <input type="checkbox" name="armario_3d" <?php echo ($permisos['armario_3d'] == 1) ? 'checked' : ''; ?>>
+        <input type="checkbox" name="armario_3d" <?php echo ($permisos[12] == 1) ? 'checked' : ''; ?>>
       </div>
       
       <!-- Botones para guardar o borar ususario -->
