@@ -11,10 +11,9 @@
 
     <!-- Acceso a la base de datos de usuarios y consultas-->
     <?php
-      $db = new SQLite3('./../bbdd/acceso_makerspace.db');
+      $db = pg_connect("host=localhost port=5432 dbname=makerspacecontrol user=postgres password=postgres") or die("Could not connect");
       $consulta = "SELECT * FROM usuarios";
-      $resultado = $db->query($consulta);
-      if(!$resultado) {die($db->lastErrorMsg());}
+      $resultado = pg_query($consulta);
     ?>
 
     <!-- Lista de usuarios para modificar -->
@@ -23,9 +22,9 @@
       <select id="opcion" onchange="redirigirEdicionUsuario()">
         <option value="">------</option>
         <?php
-          $resultado = $db->query("SELECT * FROM usuarios;");
-          while ($usuario = $resultado->fetchArray()) {
-            echo '<option value="'.$usuario['id_usuario'].'">'.$usuario['nombre'].' '.$usuario['apellidos'].'<br>'.'</option>';
+          $resultado = pg_query("SELECT * FROM usuarios;");
+          while ($usuario = pg_fetch_row($resultado)) {
+            echo '<option value="'.$usuario[0].'">'.$usuario[2].' '.$usuario[3].'<br>'.'</option>';
           }
         ?>
       </select>
@@ -35,7 +34,7 @@
     <div id="fondoElementos">
       <table >
         <tr id='index'>
-          <th>ID Usuario</th>
+          <th>ID Tarjeta</th>
           <th>Nombre</th>
           <th>Apellidos</th>
           <th>Correo</th>
@@ -43,16 +42,16 @@
         </tr>
       <?php
         //mostrar las filas de la tabla de usuarios
-        while ($usuario = $resultado->fetchArray()) {
+        $resultado = pg_query("SELECT * FROM usuarios;");
+        while ($usuario = pg_fetch_row($resultado)) {
           echo '<tr>';
-            echo '<td>'.$usuario['id_usuario'].'</td>';
-            echo '<td>'.$usuario['nombre'].'</td>';
-            echo '<td>'.$usuario['apellidos'].'</td>';
-            echo '<td>'.$usuario['correo'].'</td>';
-            echo '<td>'.$usuario['rol'].'</td>';
+            echo '<td>'.$usuario[0].'</td>';
+            echo '<td>'.$usuario[2].'</td>';
+            echo '<td>'.$usuario[3].'</td>';
+            echo '<td>'.$usuario[4].'</td>';
+            echo '<td>'.$usuario[5].'</td>';
           echo '</tr>';
         }
-        $db->close();
       ?>
       </table>
     </div>
