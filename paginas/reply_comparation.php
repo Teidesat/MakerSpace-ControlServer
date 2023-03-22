@@ -1,39 +1,36 @@
 <!-- Servidor web de ULL Makerspace -->
 <!-- Diseñado por Salvador Pérez del Pino -->
 <!DOCTYPE html>
-<link rel="stylesheet" href="./css/content.css">
 <html>
-  <?php include('./html/cabeza.html')?>
-
   <body>
-    <?php include('./html/cabecera.html')?>
-    <?php include('./html/barra-navegacion.html')?>
-
-
-
     <?php
-      if($_SERVER['REQUEST_METHOD'] == 'GET') {
+      //if($_SERVER['REQUEST_METHOD'] == 'GET') {
         // Retrieve data from URI
-        // Request de la forma: uid=X&locker=Y
-        //                      \-4-/ \--7--/
-        $uidLen = 4;
-        $lockerLen = 7;
-        $data = $_SERVER["QUERY_STRING"];
-        $uid = substr($data, $uidLen, stripos($data, "&") - 1);
-        $locker = substr($data, stripos($data, "&") + 1 + $userLen, strlen($data));
-        $db = new SQLite3('../bbdd/makerspace.db');
-        // Selecciona el nombre del usuario que tenga permiso en ese armario con esa tarjeta
-        $query = "SELECT CONCAT(nombre, apellidos) FROM usuarios natural join permisos WHERE armario_$locker = 1 and card_id = '$uid';";
-        $resultado = $db->query($query);
-        if (!$resultado) {die($db->lastErrorMsg());} else {
-          $user = $resultado->fetchArray();
-        }
+        // Request de la forma: uid=X&psswd=Y&locker=Z
+        //                      \-4-/ \--6-/  \--7--/
+        $uid = $_GET["uid"];
+        $psswd = $_GET["psswd"];
+        $armario = $_GET["locker"];
 
-        $db->close();
+        $db = pg_connect("host=localhost port=5432 dbname=makerspacecontrol user=postgres password=postgres") or die("Could not connect");
+        // Selecciona el nombre del usuario que tenga permiso en ese armario con esa tarjeta
+        $consulta = "SELECT nombre FROM usuarios natural join permisos WHERE armario_1 = '$armario' and uid = '$uid';";
+        //echo '<p>'.$uid.'</p>';
+        //echo '<p>'.$psswd.'</p>';
+        //echo '<p>'.$armario.'</p>';
+        //echo '<p>'.$consulta.'</p>';
+        $resultado = pg_query($consulta);
+        $usuario = pg_fetch_row($resultado);
+
+
+        
         // Envia el resultado al cliente
-        joson_encode(array('usuario'=>$user));
-      }
+        // joson_encode(array('usuario'=>$user));
+        // devolver la respuesta al cliente
+        //header('Content-Type: text/plain');
+        //header('HTTP/1.1 200 OK');
+        echo '<p>'.$usuario[0].'</p>';
+      //}
     ?>
   </body>
 </html>
-
