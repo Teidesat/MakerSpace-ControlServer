@@ -24,7 +24,7 @@
         <?php
           $resultado = pg_query("SELECT * FROM usuarios;");
           while ($usuario = pg_fetch_row($resultado)) {
-            echo '<option value="'.$usuario[0].'">'.$usuario[1].' '.$usuario[2].'<br>'.'</option>';
+            echo '<option value="'.$usuario[0].'">'.$usuario[2].' '.$usuario[3].'<br>'.'</option>';
           }
         ?>
       </select>
@@ -34,7 +34,7 @@
     <div id="fondoElementos">
       <table >
         <tr id='index'>
-          <th>ID Usuario</th>
+          <th>ID Tarjeta</th>
           <th>Nombre</th>
           <th>Apellidos</th>
           <th>Correo</th>
