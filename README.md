@@ -1,47 +1,38 @@
-# MakerSpace Servidor Control de Acceso
+# MakerSpace ControlServer
 
-Web y base de datos para almacenar la información de los usuarios y las tarjetas para el control de acceso al MakerSpace.
+Service to control access to the MakerSpace workshop, storage room, the cabinets for the different tools and materials.
 
-## Instalar programas
 
-Programas requeridos para ejecutar la web y la base de datos:
+## Database
 
-- sqlite3 (base de datos) 
-- php-cli (servidor web php)
-- php-sqlite (conector php y sqlite3)
+### Install and setup
 
+Install PostgreSQL and setup the database. The setup script 'makerspace-controlserver-bbdd-setup.sql' must be in a directory where the postgres default user have the required permissions. The `/home/` directory should work.
 ```sh
-sudo apt install sqlite3
-sudo apt install php-cli
-sudo apt-get install php8.1-sqlite   # Si se cuenta con otra versión de php modificar el comando
+sudo apt install postgresql
+sudo service postgresql initdb
+sudo service postgresql start
+
+sudo -u postgres psql
 ```
 
-## Instrucciones para crear la base de datos
 
-Crear base de datos o acceder a la base de datos si ya existe el fichero (Tener en cuenta que la que se encuentra en el repo contiene datos de prueba).
+### Schema
 
-```sh
-sqlite3 ./bbdd/acceso_makerspace.db # ejecutar en el directorio principal ./MakerSpace-ControlServer
-```
-
-Schema de la base de datos:
-
+Database schema. Look into 'sql/makerspace-controlserver-bbdd-setup.sql' script to check more details at the postgres implementation:
 ```sql
+DATABASE makerspacecontrol
 
-CREATE TABLE tarjetas(
-id_tarjeta TEXT PRIMARY KEY,
-contrasena TEXT);
+TABLE usuarios(
+uid TEXT PRIMARY KEY,
+passwd TEXT NOT NULL,
+nombre TEXT,
+apellidos TEXT,
+correo TEXT,
+rol TEXT)
 
-CREATE TABLE usuarios(
-id_usuario INTEGER PRIMARY KEY,
-nombre TEXT NOT NULL,
-apellidos TEXT NOT NULL,
-correo TEXT NOT NULL,
-rol TEXT,
-id_tarjeta TEXT);
-
-CREATE TABLE permisos(
-id_usuario INTEGER PRIMARY KEY,
+TABLE permisos(
+uid TEXT PRIMARY KEY REFERENCES usuarios(uid) ON DELETE CASCADE,
 entrada INTEGER NOT NULL,
 almacen INTEGER NOT NULL,
 armario_1 INTEGER NOT NULL,
@@ -53,15 +44,15 @@ armario_6 INTEGER NOT NULL,
 armario_7 INTEGER NOT NULL,
 armario_8 INTEGER NOT NULL,
 armario_9 INTEGER NOT NULL,
-armario_3d INTEGER NOT NULL);
-
-.quit
+armario_3d INTEGER NOT NULL)
 ```
 
-## Lanzar aplicación web
 
-Lanzar aplicación web en localhost:
+## Web service
 
+Launch web service with php-cli
 ```sh
+sudo apt install php-cli
+sudo apt-get install php-pgsql
 php -S 0.0.0.0:8080 # acceder a http://localhost:8080/
 ```

@@ -7,9 +7,9 @@
 
   <body>
     <?php include('./../html/cabecera.html')?>
-    <?php include('./../html/barra-navegacion-paginas.html')?>
+    <?php include('./../html/barra-navegacion.html')?>
 
-    <button class="button" onclick="location.href='gestionar_usuarios.php'">Volver atrás</button>
+    <button class="button" onclick="location.href='../index.php'">Volver atrás</button>
    
     <?php
       $db = pg_connect("host=localhost port=5432 dbname=makerspacecontrol user=postgres password=postgres") or die("Could not connect");
@@ -17,7 +17,6 @@
       // ID de la tarjeta
       $uid = $_GET["id"];
       
-
       // Gardado de los nuevos datos
       if($_SERVER['REQUEST_METHOD'] == 'POST') {
         
@@ -25,7 +24,7 @@
         if(isset($_POST['guardar'])) {
           
           // Actualizar datos del usuario
-          $uid = $_POST['uid'];
+          $uid = $_GET["id"];
           $nombre = $_POST['nombre'];
           $apellidos = $_POST['apellidos'];
           $correo = $_POST['correo'];
@@ -53,15 +52,13 @@
           
         // Si pulsa botón borrar
         } elseif (isset($_POST['borrar'])) {
-          $uid = $_POST['uid'];
+          $uid = $_GET["id"];
+
           // Borrar usuario (permisos se borran en cascada)
+          $consulta = "DELETE FROM permisos WHERE uid = '$uid';";
+          $resultado = pg_query($consulta);
           $consulta = "DELETE FROM usuarios WHERE uid = '$uid';";
           $resultado = pg_query($consulta);
-
-          
-          // Borrar permisos del usuario
-          //$consulta = "DELETE FROM permisos WHERE id_usuario = '$id_usuario';";
-          //$resultado = pg_query($consulta);
 
           echo "Usuario eliminado con éxito!";
         } 
@@ -79,19 +76,20 @@
 
     ?>
     <!-- Información del usuario a almacenar -->
+    <div class="userinfo">
+      <br>ID tarjeta: <?php echo $usuario[0]?>
+    </div> 
     <form method="POST" action="editar_usuario.php?id=<?php echo $uid?>">
       <!-- Atributos del usuario-->
-      <div class="userinfo">
-        ID tarjeta: <?php echo $usuario[0]?>
-      </div> 
+
       <div class="userinfo">Nombre:
-        <input type="text" name="nombre" value=<?php echo $usuario[2]?> required>
+        <input type="text" name="nombre" value=<?php echo $usuario[2]?>>
       </div> 
       <div class="userinfo">Apellidos:
-        <input type="text" name="apellidos" value=<?php echo $usuario[3]?> required>                    <!-- Error con que solo aparece un apellido al modificar -->
+        <input type="text" name="apellidos" value=<?php echo $usuario[3]?>>
       </div> 
       <div class="userinfo">Correo Electrónico:
-        <input type="text" name="correo" value=<?php echo $usuario[4]?> required>
+        <input type="text" name="correo" value=<?php echo $usuario[4]?>>
       </div> 
       <div class="userinfo">Rol:
         <input type="text" name="rol" value=<?php echo $usuario[5]?>>
@@ -139,7 +137,7 @@
       
       <!-- Botones para guardar o borar ususario -->
       <div class="permisos">
-        <button class="guardar" name="guardar">Guardar cambios</button>
+        <br><button class="guardar" name="guardar">Guardar cambios</button>
       </div>
       <div class="permisos">
         <button class="guardar" name="borrar">Borrar Usuario</button>
