@@ -56,3 +56,12 @@ sudo apt install php-cli
 sudo apt-get install php-pgsql
 php -S 0.0.0.0:8080 # acceder a http://localhost:8080/
 ```
+
+# ESP32 firmware
+
+## Usage
+### Writer
+The executable file `writer.cc` configures the supplied card with a new key and saves the data on the server
+
+### Reader
+The executable `reader.cc` will run constantly in the MakerSpace, it will read the data from the provided card and get locker number from the keyboard. With them, it will check the information with the server and open or not the locker showing the feedback on the screen.
